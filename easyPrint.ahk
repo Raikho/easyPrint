@@ -6,7 +6,19 @@ myGui.Title := "easyPrint"
 myGui.AddText("xp+20 yp+30 Section", "Initials:")
 initials := myGui.AddEdit("ys w40 limit2", "--")
 
+myGui.AddButton("xs y+30 Section", "Show print queues").OnEvent("click", showPrintQueues)
+
 myGui.Show("NA w300 h250")
+
+; ================================ FUNCTIONS ==================================
+showPrintQueues(*) {
+	printerAndFaxesWindowCLSID := "{2227A280-3AEA-1069-A2DE-08002B30309D}"
+
+	Run("Shell:::" . printerAndFaxesWindowCLSID, , "Min")
+	if not WinWait("Printers - File Explorer", , 2)
+		return MsgBox("error: couldn't open 'Printers' window", , "Iconx")
+}
+
 
 ; ================================ SHORTCUTS ==================================
 !numpad1:: SendInput initials.value . " P-01" . "+{enter}{enter}"
@@ -25,4 +37,6 @@ Setup:
 	{
 		#Requires AutoHotkey v2.0+
 		#SingleInstance force
+		DetectHiddenWindows true
+		SetTitleMatchMode 3
 	}
